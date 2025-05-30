@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kütüphane</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="text-center">
+      <i class="fa-solid fa-user text-light" style="font-size:2.5rem;"></i>
+      <div id="userAdSoyad" class="text-light mt-2" style="font-size:1.2rem; font-weight: bold;"></div>
+      <div id="userEmail" class="text-light mt-1" style="font-size:0.9rem;"></div>
+      <hr class="bg-light">
+    </div>
+    <ul class="list-unstyled">
+      <li><a href="#bilgi" class="btn btn-link text-light">Bilgi</a></li>
+      <li><a href="#oduncAl" class="btn btn-link text-light">Ödünç Kitap Al</a></li>
+      <li><a href="#kitaplarim" class="btn btn-link text-light">Kitaplarım</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="btn btn-danger w-100" onclick="logout()">Çıkış Yap</button>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3 d-none" style="z-index: 1050;">
+    <div id="liveToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMessage">
+          <!-- Toast message will be inserted here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="kitapTeslimModal" tabindex="-1" aria-labelledby="kitapTeslimModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="kitapTeslimModalLabel">Kitap Teslim Etme Onayı</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Bu kitabı teslim etmek istediğinizden emin misiniz?</p>
+          <p class="text-muted"><small>Kitap bilgileri:</small></p>
+          <p id="teslimKitapBilgisi"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+          <button type="button" class="btn btn-primary" id="kitapTeslimOnayBtn">Teslim Et</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div id="bilgi" class="page-section">
+      <h3>Kütüphane Bilgi</h3>
+      <p>Kütüphanemize hoş geldiniz. Buradan kitapları inceleyebilir ve ödünç alabilirsiniz.</p>
+      <div class="alert alert-info">
+        <h5>Ödünç Alma Kuralları:</h5>
+        <ul>
+          <li>Her kullanıcı yalnızca kendi hesabını kullanmalıdır.</li>
+          <li>Ödünç alınan kitaplar sadece kullanıcı hesabı üzerinden erişilebilir.</li>
+          <li>Ödünç alınan kitapların 14 gün içerisinde bitirilmesi rica olunur.</li>
+        </ul>
+      </div>
+    </div>
+    <div id="oduncAl" class="page-section d-none">
+      <h3>Ödünç Alınabilir Kitaplar</h3>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Kitap Adı</th>
+              <th>Yazar</th>
+              <th>Tür</th>
+              <th>İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="mevcutKitaplarTablo">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="kitaplarim" class="page-section d-none">
+      <h3>Ödünç Aldığım Kitaplar</h3>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Kitap Adı</th>
+              <th>Yazar</th>
+              <th>Tür</th>
+              <th>Ödünç Alınan Tarih</th>
+              <th>İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="oduncKitaplarTablo">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="kitapDetaySidebar" class="sidebar-right">
+    <div class="sidebar-header">
+      <h4>Kitap Detayları</h4>
+      <button class="btn btn-link text-dark" onclick="yanPanelKapat()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="sidebar-content">
+      <h5 id="yanPanelKitapAdi"></h5>
+      <p><strong>Yazar:</strong> <span id="yanPanelKitapYazar"></span></p>
+      <p><strong>Tür:</strong> <span id="yanPanelKitapTuru"></span></p>
+      <p><strong>Özet:</strong> <span id="yanPanelKitapOzeti"></span></p>
+      <img id="yanPanelKitapResmi" src="" alt="Kitap Resmi" style="max-width: 100%; margin-top: 10px; margin-bottom: 20px;">
+      <button class="btn btn-primary btn-block" onclick="kitapOduncAl()">Ödünç Al</button>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

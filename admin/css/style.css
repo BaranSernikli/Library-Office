@@ -1,0 +1,195 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: #2c3e50;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    display: flex;  /* Flex container yap */
+    flex-direction: column;  /* Dikey düzenleme */
+}
+.sidebar .text-center {
+    padding: 20px 0;
+}
+.sidebar i {
+    font-size: 48px;
+}
+.sidebar ul {
+    margin-top: 30px;
+    flex-grow: 1;  /* Menü listesini genişlet */
+}
+.sidebar li {
+    margin: 10px 0;
+}
+.sidebar .btn-link {
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    transition: all 0.3s;
+}
+.sidebar .btn-link:hover {
+    background-color: #34495e;
+    border-radius: 5px;
+}
+.sidebar-footer {
+    margin-top: auto;  /* Footer'ı en alta it */
+    padding: 20px 0;
+    border-top: 1px solid rgba(255,255,255,0.1);  /* Üstte ince çizgi */
+}
+.content {
+    margin-left: 250px;
+    padding: 30px;
+}
+.page-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+.card-body {
+    padding: 20px;
+}
+.card-title {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+.card h2 {
+    font-size: 2rem;
+    margin: 0;
+}
+.table {
+    margin-top: 20px;
+}
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+}
+.table td, .table th {
+    vertical-align: middle;
+}
+.modal-content {
+    border-radius: 10px;
+    border: none;
+}
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 10px 10px 0 0;
+}
+.modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    border-radius: 0 0 10px 10px;
+}
+.btn {
+    border-radius: 5px;
+    padding: 8px 16px;
+    transition: all 0.3s;
+}
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+.btn-danger {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+}
+.btn-danger:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .content {
+        margin-left: 200px;
+    }
+    
+    .card {
+        margin-bottom: 20px;
+    }
+}
+
+@media (min-width: 768px) {
+    .table-container {
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+    }
+}
+
+.index-column {
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+}
+
+th, td {
+    text-align: left;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+th:nth-child(2), th:nth-child(3),
+td:nth-child(2), td:nth-child(3) {
+    width: 50%;
+}
+
+.sidebar-info {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 350px;
+  height: 100%;
+  background: #121e2d;
+  color: white;
+  padding: 20px;
+  transition: 0.4s;
+  overflow-y: auto;
+  z-index: 1000;
+}
+.sidebar-info.active {
+  right: 0;
+}
+.sidebar-info h4 {
+  margin-bottom: 10px;
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.book-cover {
+  width: 150px;
+  height: auto;
+  display: block;  
+  margin: 10px auto;
+  border-radius: 8px;
+}
+
