@@ -2,13 +2,6 @@ if (!localStorage.getItem('kullanicilar')) {
     localStorage.setItem('kullanicilar', JSON.stringify([]));
 }
 
-const adminBilgileri = {
-    eposta: 'baran1@gmail.com',
-    sifre: 'admin123',
-    tip: 'admin',
-    tamAd: 'Baran Sernikli' 
-};
-
 if (!localStorage.getItem('sifreSifirlamaTokenlari')) {
     localStorage.setItem('sifreSifirlamaTokenlari', JSON.stringify({}));
 }
@@ -92,7 +85,8 @@ function kullaniciGirisYap(event) {
     const eposta = document.getElementById('userEmail').value;
     const sifre = document.getElementById('userPassword').value;
     
-    if (eposta === adminBilgileri.eposta) {
+    const adminler = JSON.parse(localStorage.getItem('adminler')) || [];
+    if (adminler.some(admin => admin.email === eposta)) {
         toastGoster('Bu hesap admin hesabıdır. Lütfen admin girişini kullanın!', 'danger');
         return false;
     }
@@ -130,24 +124,21 @@ function adminGirisYap(event) {
     const eposta = document.getElementById('adminEmail').value;
     const sifre = document.getElementById('adminPassword').value;
     
-    const kullanicilar = JSON.parse(localStorage.getItem('kullanicilar')) || [];
-    const normalKullaniciVarMi = kullanicilar.some(k => k.eposta === eposta);
+    const adminler = JSON.parse(localStorage.getItem('adminler')) || [];
     
-    if (normalKullaniciVarMi) {
-        toastGoster('Bu hesap kullanıcı hesabıdır. Lütfen kullanıcı girişini kullanın!', 'danger');
-        return false;
-    }
+    const admin = adminler.find(a => a.email === eposta);
     
-    if (eposta !== adminBilgileri.eposta) {
+    if (!admin) {
         toastGoster('Sistemde kayıtlı admin hesabı bulunmamaktadır!', 'danger');
         return false;
     }
     
-    if (adminBilgileri.sifre === sifre) {
+    if (admin.sifre === sifre) {
         localStorage.setItem('aktifKullanici', JSON.stringify({
-            eposta: adminBilgileri.eposta,
-            tip: adminBilgileri.tip,
-            tamAd: adminBilgileri.tamAd
+            id: admin.id,
+            eposta: admin.email,
+            tip: 'admin',
+            tamAd: admin.adSoyad
         }));
         
         window.location.href = '../admin/index.html';
@@ -177,11 +168,13 @@ function kayitOl(event) {
     }
     
     const kullanicilar = JSON.parse(localStorage.getItem('kullanicilar')) || [];
+    const adminler = JSON.parse(localStorage.getItem('adminler')) || [];
     
-    const epostaZatenKullaniliyor = kullanicilar.some(k => k.eposta === eposta) || (adminBilgileri.eposta === eposta);
+    const epostaZatenKullaniliyor = kullanicilar.some(k => k.eposta === eposta) || 
+                                   adminler.some(a => a.email === eposta);
 
     if (epostaZatenKullaniliyor) {
-         alert('Bu e-posta adresi zaten kayıtlı!'); 
+        alert('Bu e-posta adresi zaten kayıtlı!'); 
         return false;
     }
     

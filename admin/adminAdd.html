@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Ekle - Kütüphane Yönetim Paneli</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="text-center">Admin Ekle</h1>
+                    </div>
+                    <div class="card-body">
+                        <form id="adminEkleForm">
+                            <div class="form-group">
+                                <label for="adminAdSoyad">Ad Soyad</label>
+                                <input type="text" class="form-control" id="adminAdSoyad" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adminEmail">E-posta</label>
+                                <input type="email" class="form-control" id="adminEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adminSifre">Şifre</label>
+                                <input type="password" class="form-control" id="adminSifre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adminSifreTekrar">Şifre Tekrar</label>
+                                <input type="password" class="form-control" id="adminSifreTekrar" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Admin Ekle</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        
+        window.onload = function() {
+            console.log('Mevcut adminler:', localStorage.getItem('adminler'));
+        }
+
+        document.getElementById('adminEkleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const adSoyad = document.getElementById('adminAdSoyad').value.trim();
+            const email = document.getElementById('adminEmail').value.trim();
+            const sifre = document.getElementById('adminSifre').value;
+            const sifreTekrar = document.getElementById('adminSifreTekrar').value;
+
+            
+            if (!adSoyad || !email || !sifre || !sifreTekrar) {
+                alert('Lütfen tüm alanları doldurun!');
+                return;
+            }
+
+            if (sifre !== sifreTekrar) {
+                alert('Şifreler eşleşmiyor!');
+                return;
+            }
+
+            try {
+                
+                let adminler = [];
+                const mevcutAdminler = localStorage.getItem('adminler');
+                if (mevcutAdminler) {
+                    adminler = JSON.parse(mevcutAdminler);
+                    console.log('Mevcut adminler yüklendi:', adminler);
+                }
+                
+                
+                if (adminler.some(admin => admin.email === email)) {
+                    alert('Bu e-posta adresi zaten kullanılıyor!');
+                    return;
+                }
+
+                const yeniAdmin = {
+                    id: Date.now(),
+                    adSoyad: adSoyad,
+                    email: email,
+                    sifre: sifre,
+                    yetki: 'admin',
+                    kayitTarihi: new Date().toISOString()
+                };
+
+                adminler.push(yeniAdmin);
+                
+                
+                localStorage.setItem('adminler', JSON.stringify(adminler));
+                console.log('Yeni admin eklendi:', yeniAdmin);
+                console.log('Güncellenmiş admin listesi:', adminler);
+
+                alert('Admin başarıyla eklendi!');
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Admin eklenirken hata oluştu:', error);
+                alert('Admin eklenirken bir hata oluştu. Lütfen tekrar deneyin.');
+            }
+        });
+    </script>
+</body>
+</html> 

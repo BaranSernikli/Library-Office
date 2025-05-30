@@ -69,7 +69,7 @@ function tablolariGuncelle() {
     mevcutTablo.innerHTML = '';
     kitaplar.forEach((kitap, index) => {
         const kitapOduncAlinmis = oduncKitaplar.some(odunc => 
-            (odunc.ad === kitap.ad && odunc.yazar === kitap.yazar) || 
+            (odunc.ad === kitap.ad && odunc.yazar === odunc.yazar) || 
             (odunc.id === kitap.id)
         );
 
@@ -297,7 +297,42 @@ function kitapTeslimEt(originalIndex) {
     }
 }
 
-function logout() {
+function cikisYap() {
     localStorage.removeItem('aktifKullanici');
+    window.location.href = '../login/login.html';
+}
+
+function hesabiSil() {
+    console.log('Hesap silme modalı gösteriliyor...');
+    $('#hesapSilOnayModal').modal('show');
+}
+
+function confirmHesapSil() {
+    console.log('Hesap silme onaylandı, işlem başlatılıyor...');
+    $('#hesapSilOnayModal').modal('hide'); 
+
+    const aktifKullanici = JSON.parse(localStorage.getItem('aktifKullanici'));
+    if (!aktifKullanici) {
+        alert('Aktif kullanıcı bulunamadı.');
+        console.error('Aktif kullanıcı silme işlemi sırasında bulunamadı.');
+        return;
+    }
+
+    const kullanicilar = JSON.parse(localStorage.getItem('kullanicilar')) || [];
+    const guncelKullanicilar = kullanicilar.filter(k => k.eposta !== aktifKullanici.eposta);
+    localStorage.setItem('kullanicilar', JSON.stringify(guncelKullanicilar));
+    console.log('Kullanıcı listesinden silindi:', aktifKullanici.eposta);
+
+    
+    const oduncKitaplar = JSON.parse(localStorage.getItem('oduncKitaplar')) || {};
+    if (oduncKitaplar[aktifKullanici.eposta]) {
+        delete oduncKitaplar[aktifKullanici.eposta];
+        localStorage.setItem('oduncKitaplar', JSON.stringify(oduncKitaplar));
+        console.log('Ödünç alınan kitapları temizlendi:', aktifKullanici.eposta);
+    }
+
+    localStorage.removeItem('aktifKullanici');
+    alert('Hesabınız başarıyla silindi.');
+    console.log('Hesap silme işlemi tamamlandı, çıkış yapılıyor.');
     window.location.href = '../login/login.html';
 }
